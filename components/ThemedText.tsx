@@ -1,4 +1,7 @@
 import { Text, StyleSheet, TextProps } from "react-native";
+import { Colors } from "../constants/Colors";
+import { useThemeColors } from "@/hooks/useThemeColors";
+
 const styles = StyleSheet.create({
   body3: {
     fontSize: 10,
@@ -37,11 +40,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
 type Props = TextProps & {
-  variant?: keyof styles;
-  color?: string;
+  variant?: keyof typeof styles;
+  color?: keyof (typeof Colors)["light"];
 };
 
 export default function ThemedText({ variant, color, ...rest }: Props) {
-  return <Text style={styles[variant ?? "body3"]} {...rest} />;
+  const colors = useThemeColors();
+
+  return (
+    <Text
+      style={[styles[variant ?? "body3"], { color: colors[color ?? "grayDark"] }]}
+      {...rest}
+    />
+  );
 }
